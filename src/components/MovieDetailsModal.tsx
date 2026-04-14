@@ -43,18 +43,18 @@ export function MovieDetailsModal({ movieId, onClose }: MovieModalProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-black/80 backdrop-blur-md"
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         />
         
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative z-10 w-full max-w-5xl overflow-hidden rounded-[2rem] bg-white shadow-2xl"
+          className="relative z-10 w-full max-w-5xl overflow-hidden rounded-[2.5rem] bg-white shadow-2xl"
         >
           <button
             onClick={onClose}
-            className="absolute right-6 top-6 z-20 rounded-full bg-black/10 p-2.5 text-black transition-all hover:bg-black/20 hover:rotate-90 active:scale-90 md:bg-white/10 md:text-white md:hover:bg-white/20"
+            className="absolute right-6 top-6 z-20 rounded-full bg-black/5 p-2.5 text-black transition-all hover:bg-black/10 hover:rotate-90 active:scale-90"
             aria-label="Close modal"
           >
             <X className="h-6 w-6" />
