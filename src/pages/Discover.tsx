@@ -9,7 +9,7 @@ import { useMovies } from '@/hooks/useMovies';
 import { motion, AnimatePresence } from 'motion/react';
 import { Badge } from '@/components/ui/badge';
 
-export function Home() {
+export function Discover() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
   const { movies, loading, error } = useMovies(searchTerm);

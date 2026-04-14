@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Star, Clock, Calendar, Globe, User, Video, Award } from 'lucide-react';
+import { X, Star, Clock, Calendar, Globe, User, Video, Award, Bookmark, BookmarkCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { getMovieDetails } from '@/services/omdbService';
+import { useLibrary } from '@/hooks/useLibrary';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface MovieModalProps {
   movieId: string | null;
@@ -12,6 +15,7 @@ interface MovieModalProps {
 export function MovieDetailsModal({ movieId, onClose }: MovieModalProps) {
   const [movie, setMovie] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const { toggleLibrary, isInLibrary } = useLibrary();
 
   useEffect(() => {
     if (movieId) {
@@ -34,6 +38,8 @@ export function MovieDetailsModal({ movieId, onClose }: MovieModalProps) {
   }, [onClose]);
 
   if (!movieId) return null;
+
+  const isSaved = movie ? isInLibrary(movie.imdbID) : false;
 
   return (
     <AnimatePresence>
@@ -77,15 +83,38 @@ export function MovieDetailsModal({ movieId, onClose }: MovieModalProps) {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent md:hidden" />
                 </div>
                 <div className="flex flex-col p-8 md:col-span-7 md:p-12 lg:col-span-8">
-                  <div className="mb-6 flex flex-wrap gap-2">
-                    {movie.Genre.split(', ').map((g: string) => (
-                      <Badge key={g} variant="secondary" className="bg-primary/10 px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/20">
-                        {g}
+                  <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex flex-wrap gap-2">
+                      {movie.Genre.split(', ').map((g: string) => (
+                        <Badge key={g} variant="secondary" className="bg-primary/10 px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/20">
+                          {g}
+                        </Badge>
+                      ))}
+                      <Badge variant="outline" className="border-muted-foreground/20 px-3 py-1 text-xs font-semibold text-muted-foreground">
+                        {movie.Rated}
                       </Badge>
-                    ))}
-                    <Badge variant="outline" className="border-muted-foreground/20 px-3 py-1 text-xs font-semibold text-muted-foreground">
-                      {movie.Rated}
-                    </Badge>
+                    </div>
+                    
+                    <Button
+                      onClick={() => toggleLibrary(movie)}
+                      variant={isSaved ? "default" : "outline"}
+                      className={cn(
+                        "h-10 gap-2 rounded-xl px-4 font-bold transition-all",
+                        isSaved ? "bg-primary text-white" : "border-primary/20 text-primary hover:bg-primary/5"
+                      )}
+                    >
+                      {isSaved ? (
+                        <>
+                          <BookmarkCheck className="h-4 w-4" />
+                          Saved
+                        </>
+                      ) : (
+                        <>
+                          <Bookmark className="h-4 w-4" />
+                          Save to Library
+                        </>
+                      )}
+                    </Button>
                   </div>
                   
                   <h2 className="mb-4 text-4xl font-black tracking-tight text-foreground md:text-5xl lg:text-6xl">
